@@ -1,5 +1,5 @@
 # vertx3-blocking
-Tests for vertx bug that don't instant sends messages while processing handlers!
+Tests for vertx bug that doesn't send instantaneously messages while processing handlers!
 - https://github.com/vert-x3/vertx-hazelcast/issues/43 - (clustured vertx)!
 - https://github.com/eclipse/vert.x/issues/1631 (non clustered vertx)!
 
