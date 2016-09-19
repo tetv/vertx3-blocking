@@ -13,7 +13,7 @@ fi
 # CONFIGURATION
 PONG_WAIT=-Dwait=50
 PING_TIMES=-Dtimes=500
-ASYNC="-Dvertx.hazelcast.async-api=true"
+#ASYNC="-Dvertx.hazelcast.async-api=true"
 
 # DON'T NEED TO CHANGE
 TAB="                             "
@@ -120,74 +120,74 @@ for n in $@; do
     ;;
 
     31)
-       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Pong   -id pong         "$OPTS" $PONG_WAIT -Dmode=exec1 -Dordered=true  -cluster
+       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Pong   -id pong         "$OPTS" $PONG_WAIT -Dmode=wexec -Dordered=true  -cluster
        sleep 1
        java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Ping   -id ping -worker "$OPTS" $PING_TIMES                             -cluster
        report $n ping pong
     ;;
     32)
-       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Pong   -id pong -worker "$OPTS" $PONG_WAIT -Dmode=exec1 -Dordered=true  -cluster
+       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Pong   -id pong -worker "$OPTS" $PONG_WAIT -Dmode=wexec -Dordered=true  -cluster
        sleep 1
        java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Ping   -id ping -worker "$OPTS" $PING_TIMES                             -cluster
        report $n ping pong
     ;;
     33)
-       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.PongMT -id pong -worker "$OPTS" $PONG_WAIT -Dmode=exec1 -Dordered=true  -cluster
+       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.PongMT -id pong -worker "$OPTS" $PONG_WAIT -Dmode=wexec -Dordered=true  -cluster
        sleep 1
        java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Ping   -id ping -worker "$OPTS" $PING_TIMES                             -cluster
        report $n ping pong
     ;;
     34)
-       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Pong   -id pong         "$OPTS" $PONG_WAIT -Dmode=exec1 -Dordered=false -cluster
+       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Pong   -id pong         "$OPTS" $PONG_WAIT -Dmode=wexec -Dordered=false -cluster
        sleep 1
        java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Ping   -id ping -worker "$OPTS" $PING_TIMES                             -cluster
        report $n ping pong
     ;;
     35)
-       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Pong   -id pong -worker "$OPTS" $PONG_WAIT -Dmode=exec1 -Dordered=false -cluster
+       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Pong   -id pong -worker "$OPTS" $PONG_WAIT -Dmode=wexec -Dordered=false -cluster
        sleep 1
        java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Ping   -id ping -worker "$OPTS" $PING_TIMES                             -cluster
        report $n ping pong
     ;;
     36)
-       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.PongMT -id pong -worker "$OPTS" $PONG_WAIT -Dmode=exec1 -Dordered=false -cluster
+       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.PongMT -id pong -worker "$OPTS" $PONG_WAIT -Dmode=wexec -Dordered=false -cluster
        sleep 1
        java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Ping   -id ping -worker "$OPTS" $PING_TIMES                             -cluster
        report $n ping pong
     ;;
 
     41)
-       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Pong   -id pong         "$OPTS" $PONG_WAIT -Dmode=exec2 -Dordered=true  -cluster
+       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Pong   -id pong         "$OPTS" $PONG_WAIT -Dmode=jexec -Dordered=true  -cluster
        sleep 1
        java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Ping   -id ping -worker "$OPTS" $PING_TIMES                             -cluster
        report $n ping pong
     ;;
     42)
-       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Pong   -id pong -worker "$OPTS" $PONG_WAIT -Dmode=exec2 -Dordered=true  -cluster
+       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Pong   -id pong -worker "$OPTS" $PONG_WAIT -Dmode=jexec -Dordered=true  -cluster
        sleep 1
        java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Ping   -id ping -worker "$OPTS" $PING_TIMES                             -cluster
        report $n ping pong
     ;;
     43)
-       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.PongMT -id pong -worker "$OPTS" $PONG_WAIT -Dmode=exec2 -Dordered=true  -cluster
+       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.PongMT -id pong -worker "$OPTS" $PONG_WAIT -Dmode=jexec -Dordered=true  -cluster
        sleep 1
        java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Ping   -id ping -worker "$OPTS" $PING_TIMES                             -cluster
        report $n ping pong
     ;;
     44)
-       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Pong   -id pong         "$OPTS" $PONG_WAIT -Dmode=exec2 -Dordered=false -cluster
+       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Pong   -id pong         "$OPTS" $PONG_WAIT -Dmode=jexec -Dordered=false -cluster
        sleep 1
        java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Ping   -id ping -worker "$OPTS" $PING_TIMES                             -cluster
        report $n ping pong
     ;;
     45)
-       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Pong   -id pong -worker "$OPTS" $PONG_WAIT -Dmode=exec2 -Dordered=false -cluster
+       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Pong   -id pong -worker "$OPTS" $PONG_WAIT -Dmode=jexec -Dordered=false -cluster
        sleep 1
        java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Ping   -id ping -worker "$OPTS" $PING_TIMES                             -cluster
        report $n ping pong
     ;;
     46)
-       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.PongMT -id pong -worker "$OPTS" $PONG_WAIT -Dmode=exec2 -Dordered=false -cluster
+       java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.PongMT -id pong -worker "$OPTS" $PONG_WAIT -Dmode=jexec -Dordered=false -cluster
        sleep 1
        java $JAVA_OPT -cp 'target/*' io.vertx.core.Launcher start com.tetv.verticles.Ping   -id ping -worker "$OPTS" $PING_TIMES                             -cluster
        report $n ping pong

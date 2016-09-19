@@ -7,22 +7,45 @@ import io.vertx.core.WorkerExecutor;
 import io.vertx.core.eventbus.Message;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 public class Pong extends AbstractVerticle {
     private final static Log LOG = Log.getLogger(Pong.class);
-    private final String name = System.getProperty("vertx.id");
-    private final int wait = Integer.parseInt(System.getProperty("wait", "-1"));
-    private final String mode = System.getProperty("mode", "default");
-    private final boolean ordered = Boolean.parseBoolean(System.getProperty("ordered", "true"));
-    private final ExecutorService exec2 = ordered ? Executors.newSingleThreadExecutor() : Executors.newFixedThreadPool(20);
-    private WorkerExecutor exec1;
+    private final String name = System.getProperty("vertx.id", "pong");
+    private final List<Long> finishedProcessedTimeList = new CopyOnWriteArrayList<>();
+    private final int wait;
+    private final String mode;
+    private final boolean ordered;
+    private final ExecutorService javaExecutor;
+    private WorkerExecutor workerExecutor;
+
+    public Pong() {
+        this.wait = Integer.parseInt(System.getProperty("wait", "-1"));
+        this.mode = System.getProperty("mode", "default");
+        this.ordered = Boolean.parseBoolean(System.getProperty("ordered", "true"));
+        this.javaExecutor = ordered ? Executors.newSingleThreadExecutor() : Executors.newFixedThreadPool(20);
+    }
+
+    public Pong(int wait, String mode, boolean ordered) {
+        this.wait = wait;
+        this.mode = mode;
+        this.ordered = ordered;
+        this.javaExecutor = ordered ? Executors.newSingleThreadExecutor() : Executors.newFixedThreadPool(20);
+    }
+
+    int numProcessedBalls() {
+        return finishedProcessedTimeList.size();
+    }
+
+    long getFinishedProcessTime(int nthBall) {
+        return finishedProcessedTimeList.get(nthBall-1);
+    }
 
     @Override
     public void start() {
-        exec1 = getVertx().createSharedWorkerExecutor("vert.x-new-internal-blocking-thread", 20);
+        workerExecutor = getVertx().createSharedWorkerExecutor("vert.x-new-internal-blocking-thread", 20);
 
         LOG.info("Ordered:" + ordered);
         LOG.info("Wait:" + wait);
@@ -39,15 +62,15 @@ public class Pong extends AbstractVerticle {
                     }, ordered, result -> {
                     });
                     break;
-                case "exec1":
-                    exec1.executeBlocking(future -> {
+                case "wexec":
+                    workerExecutor.executeBlocking(future -> {
                         process(message);
                         future.complete();
                     }, ordered, result -> {
                     });
                     break;
-                case "exec2":
-                    exec2.execute(() -> {
+                case "jexec":
+                    javaExecutor.execute(() -> {
                         process(message);
                     });
                     break;
@@ -64,7 +87,8 @@ public class Pong extends AbstractVerticle {
         LOG.info(String.format("%s> %s recv", name, ball));
         process(wait);
         LOG.info(String.format("%s> %s send", name, ball));
-        message.reply(ball.replaceFirst(" .*", ""));
+        message.reply(ball);
+        finishedProcessedTimeList.add(System.currentTimeMillis());
     }
 
     private static void process(long millis) {
