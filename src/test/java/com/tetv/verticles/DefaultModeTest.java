@@ -9,8 +9,6 @@ import org.junit.runners.MethodSorters;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -59,7 +57,6 @@ public class DefaultModeTest {
     }
 
     @Rule public Timeout timeout = new Timeout(30, TimeUnit.SECONDS);
-    @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     @Parameters(name = "{index}: {0}/{1}/{2}/{3}/{4}/{5}/{6}")
     public static Collection<Object[]> data() {
