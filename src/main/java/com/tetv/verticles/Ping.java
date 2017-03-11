@@ -1,24 +1,27 @@
 package com.tetv.verticles;
 
-import com.tetv.util.Log;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Launcher;
 import io.vertx.core.eventbus.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
+import java.time.LocalTime;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Ping extends AbstractVerticle {
-    private final static Log LOG = Log.getLogger(Ping.class);
+    private final static Logger LOG = LoggerFactory.getLogger(Ping.class);
     private final String name = System.getProperty("vertx.id", "ping");
-    private final Collection<String> receivedBalls = new ConcurrentSkipListSet<>();
+    private final AtomicInteger lastReceivedPos = new AtomicInteger();
     private final int times;
-    private long finishSendingTime = -1;
+    final Map<String, Long> receivedTimeMap = new ConcurrentHashMap<>();
+    final Map<String, Integer> receivedPosMap = new ConcurrentHashMap<>();
+    long finishSendingTime = -1;
 
     public Ping() {
         this.times = Integer.parseInt(System.getProperty("times", "1"));
@@ -28,28 +31,21 @@ public class Ping extends AbstractVerticle {
         this.times = times;
     }
 
-    Collection<String> receivedBalls() {
-        return receivedBalls;
-    }
-
-    long getFinishedSentTime() {
-        return finishSendingTime;
-    }
-
     @Override
     public void start() {
-        LOG.info("Times:" + times);
+        LOG.info("Times: {}", times);
 
         for (int i = 1; i <= times; i++) {
             String ball = String.format("ball%03d", i);
-            LOG.info(String.format("%s> %s send", name, ball));
+            LOG.info("{}> {} send [{}]", name, ball, LocalTime.now());
             getVertx().eventBus().send("table", ball, (AsyncResult<Message<String>> response) -> {
                 if (response.succeeded()) {
                     String receivedBall = response.result().body();
-                    LOG.info(String.format("%s> %s recv", name, receivedBall));
-                    receivedBalls.add(receivedBall);
+                    receivedPosMap.put(receivedBall, lastReceivedPos.incrementAndGet());
+                    receivedTimeMap.put(receivedBall, System.currentTimeMillis());
+                    LOG.info("{}> {} recv [{}]", name, receivedBall, LocalTime.now());
                 } else {
-                    LOG.error(String.format("%s> failed", name), response.cause());
+                    LOG.error("{}> failed", name, response.cause());
                 }
             });
         }

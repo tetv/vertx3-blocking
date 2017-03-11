@@ -34,7 +34,7 @@ public class VertxTest {
         AsyncResult<String> result = ref.get();
         assertThat(result.cause()).isNull();
         assertThat(result.succeeded()).isTrue();
-        System.out.println("Successfully deployed: " + result.result());
+        //System.out.println("Successfully deployed: " + result.result());
         return this;
     }
 

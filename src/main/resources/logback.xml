@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Setup logs for verx and hazelcast -->
+    <logger name="io.vertx" level="ERROR" />
+    <logger name="com.hazelcast" level="ERROR" />
+    <logger name="io.netty.util.internal.PlatformDependent" level="ERROR" />
+
+    <!-- Setup logs for verticles -->
+    <logger name="com.tetv.verticles" level="ERROR" />
+
+    <!-- Local Properties: https://logback.qos.ch/manual/configuration.html -->
+    <property name="log.timestamp" value="%date{yyyy-MM-dd'T'HH:mm:ss.SSS}" />
+    <property name="log.pattern" value="${log.timestamp} %-5level [%-15.15thread{14}] %logger %message%n" />
+
+    <!-- Direct log messages to stdout -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.err</target>
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>all</level>
+        </filter>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>
